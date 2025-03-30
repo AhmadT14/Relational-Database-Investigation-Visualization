@@ -1,0 +1,104 @@
+#Question 1: Number of times each movie has been rented out
+SELECT
+  film_title
+ ,category_name
+ ,COUNT(*) AS rental_count
+FROM (SELECT
+    f.title AS film_title
+   ,c.name AS category_name
+  FROM film f
+  JOIN film_category fc
+    ON f.film_id = fc.film_id
+  JOIN category c
+    ON c.category_id = fc.category_id
+  JOIN inventory i
+    ON i.film_id = f.film_id
+  JOIN rental r
+    ON r.inventory_id = i.inventory_id) t1
+WHERE category_name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+GROUP BY film_title
+        ,category_name
+ORDER BY category_name, film_title;
+
+#Question 2: Number of rental orders each store has fulfilled for each month.
+SELECT
+  rental_month
+ ,rental_year
+ ,store_id
+ ,COUNT(*) AS count_rentals
+FROM (SELECT
+    date_part('month', r.rental_date) AS rental_month
+   ,date_part('year', r.rental_date) AS rental_year
+   ,store.store_id AS store_id
+  FROM store
+  JOIN staff
+    ON store.manager_staff_id = staff.staff_id
+  JOIN rental r
+    ON r.staff_id = staff.staff_id) t1
+GROUP BY rental_month
+        ,rental_year
+        ,store_id
+ORDER BY count_rentals DESC;
+
+
+#Question 3: The top paying customers
+WITH top_customers AS (
+    SELECT 
+        c.customer_id, 
+        c.first_name, 
+        c.last_name, 
+        SUM(p.amount) AS total_paid
+    FROM customer c
+    JOIN payment p ON c.customer_id = p.customer_id
+    GROUP BY c.customer_id, c.first_name, c.last_name
+    ORDER BY total_paid DESC
+    LIMIT 10
+)
+
+SELECT 
+    DATE_TRUNC('month', p.payment_date) AS pay_mon,
+    tc.first_name || ' ' || tc.last_name AS fullname,
+    COUNT(*) AS pay_count_per_mon,
+    SUM(p.amount) AS pay_amount
+FROM payment p
+JOIN top_customers tc ON p.customer_id = tc.customer_id
+GROUP BY pay_mon, fullname
+ORDER BY fullname, pay_mon;
+
+
+#Quetion 4: Comparing the payment amounts in each successive month for the top paying customers
+WITH top_customers AS (
+    SELECT 
+        c.customer_id, 
+        c.first_name, 
+        c.last_name, 
+        SUM(p.amount) AS total_paid 
+    FROM customer c
+    JOIN payment p ON c.customer_id = p.customer_id
+    GROUP BY c.customer_id, c.first_name, c.last_name
+    ORDER BY total_paid DESC
+    LIMIT 10
+), 
+monthly_payments AS (
+    SELECT 
+        p.customer_id, 
+        DATE_TRUNC('month', p.payment_date) AS pay_mon,
+        tc.first_name || ' ' || tc.last_name AS fullname,
+        COUNT(p.amount) AS pay_count_per_mon,
+        SUM(p.amount) AS pay_amount
+    FROM payment p
+    JOIN top_customers tc ON p.customer_id = tc.customer_id
+    GROUP BY pay_mon, fullname, p.customer_id
+    ORDER BY fullname, pay_mon
+)
+SELECT 
+    mp.pay_mon, 
+    mp.fullname, 
+    mp.pay_amount, 
+    LAG(mp.pay_amount) OVER (partition BY mp.fullname) AS previous_payment, 
+    mp.pay_amount - LAG(mp.pay_amount) OVER (partition BY mp.fullname) AS monthly_payment_difference
+FROM top_customers tc
+JOIN monthly_payments mp ON tc.customer_id = mp.customer_id
+ORDER BY fullname, pay_mon;
+
+
