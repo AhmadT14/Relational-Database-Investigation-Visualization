@@ -10,7 +10,7 @@ This project strengthened my ability to effectively work with **databases** and 
 - **Data Visualization:** Transformed raw data into understandable insights.
 
 ## **Udacity Project Completion** 🖼️
-![Screenshot 2025-03-30 085403](https://github.com/user-attachments/assets/462ca09a-33e7-4e82-92d3-a68984dd77f7)
+![Screenshot 2025-03-10 135520](https://github.com/user-attachments/assets/21a48f54-8256-4b13-922b-d0fde4c11c2a)
 
 ## **visualizations** 📊
 ![Screenshot 2025-03-30 084227](https://github.com/user-attachments/assets/8c862927-d9b7-4cd4-a4f0-2efd90421a33)
