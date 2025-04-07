@@ -12,7 +12,7 @@ This project strengthened my ability to effectively work with **databases** and 
 ## Screenshot 🖼️
 ![Screenshot 2025-03-30 085403](https://github.com/user-attachments/assets/462ca09a-33e7-4e82-92d3-a68984dd77f7)
 
-## Visiualizations 
+## visualizations 📊
 ![Screenshot 2025-03-30 084227](https://github.com/user-attachments/assets/8c862927-d9b7-4cd4-a4f0-2efd90421a33)
 ![Screenshot 2025-03-30 084240](https://github.com/user-attachments/assets/d46c6124-6f38-4200-9ec6-05dc4160d0ca)
 ![Screenshot 2025-03-30 084251](https://github.com/user-attachments/assets/a3707e3c-93be-4507-8ff8-2feb71d8d3bc)
